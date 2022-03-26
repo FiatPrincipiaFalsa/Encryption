@@ -1,0 +1,69 @@
+def BlockBinarize(TextBlock):
+    UnicodeBlock=[]
+    for i in range(8):
+        UnicodeBlock.append(ord(TextBlock[i]))
+    print(UnicodeBlock,"UnicodeBlock")
+    BinaryBlock = ""
+    for i in range(8):
+        BinaryBlock = BinaryBlock + bin(UnicodeBlock[i])[2:].zfill(8)
+    return(BinaryBlock)
+
+def EncryptBlock(BinaryBlock,KeyBlock):
+    EncryptedBlock=""
+    for i in range(64):
+        EncryptedBlock = EncryptedBlock + str(int(BinaryBlock[i])^int(KeyBlock[i]))
+    return(EncryptedBlock)
+
+Mode = input("[b]inary/[t]ext?")
+KeyBlock = input("Binarykey[64b]").zfill(64)
+PlainText = str(input("messege"))
+
+if Mode == "t":
+    NumberofCharacters = len(PlainText)
+    for i in range(8 - (NumberofCharacters % 8)):
+        PlainText = PlainText + " "
+        NumberofCharacters+=1
+    NumberofBlocks = int(NumberofCharacters / 8)
+    PlainTextBlock = ["" , "" , "" , "" , "" , "" , "" , ""]
+if Mode == "b":
+    NumberofBits = len(PlainText)
+    if NumberofBits % 64 != 0:
+        print("youre input is wrong")
+    NumberofBlocks = int(NumberofBits / 64)
+else:
+    print("something has gone wrong :/")
+
+WholeMessage=""
+WholeBinary=""
+for i in range(NumberofBlocks):
+    if Mode == "t":
+        for j in range(8):
+            PlainTextBlock[j] = PlainText[j+(8*i)]
+        print(PlainTextBlock,"PlainTextBlock")
+        BinaryBlock = BlockBinarize(PlainTextBlock)
+    if Mode == "b":
+        BinaryBlock = PlainText[64 * i:64 * (i + 1)]
+
+    print(BinaryBlock,"BinaryBlock")
+    EncryptedBlock = EncryptBlock(BinaryBlock,KeyBlock)
+    print(KeyBlock,"KeyBlock")
+    print(EncryptedBlock,"EncryptedBlock")
+    WholeBinary = WholeBinary + EncryptedBlock
+
+    if Mode == "b":
+        EncryptedBlockeighths=[]
+        string=""
+        for j in range(8):
+            string= "0b"+EncryptedBlock[j * 8:(j + 1) * 8]
+            EncryptedBlockeighths.append(string)
+        print(EncryptedBlockeighths,"Encrypted Block Eighths")
+        message = ""
+        for j in range(8):
+            message = message + chr(int(EncryptedBlockeighths[j],base=2))
+        print(message)
+        print("\n")
+        WholeMessage = WholeMessage + message
+if Mode == "b":
+    print(WholeMessage)
+if Mode == "t":
+    print(WholeBinary)
