@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 def BlockBinarize(TextBlock):
     UnicodeBlock=[]
     for i in range(8):
