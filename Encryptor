@@ -47,19 +47,24 @@ else:
 
 WholeMessage=""
 WholeBinary=""
+
 for i in range(NumberofBlocks):
-    if Mode != "b":
+    
+    if Mode == "b":
+        BinaryBlock = PlainText[64 * i:64 * (i + 1)]
+    else:
         for j in range(8):
             PlainTextBlock[j] = PlainText[j+(8*i)]
         print(PlainTextBlock,"PlainTextBlock")
         BinaryBlock = BlockBinarize(PlainTextBlock)
-    if Mode == "b":
-        BinaryBlock = PlainText[64 * i:64 * (i + 1)]
-
+        
     print(BinaryBlock,"BinaryBlock")
-    EncryptedBlock = EncryptBlock(BinaryBlock,KeyBlock)
+    
     print(KeyBlock,"KeyBlock")
+    
+    EncryptedBlock = EncryptBlock(BinaryBlock,KeyBlock)
     print(EncryptedBlock,"EncryptedBlock")
+    
     WholeBinary = WholeBinary + EncryptedBlock
 
     if Mode == "b":
@@ -74,8 +79,11 @@ for i in range(NumberofBlocks):
             message = message + chr(int(EncryptedBlockeighths[j],base=2))
         print(message)
         print("\n")
+        
         WholeMessage = WholeMessage + message
+    WholeBinary = WholeBinary + EncryptedBlock
+    
 if Mode == "b":
     print(WholeMessage)
-if Mode != "b":
+else:
     print(WholeBinary)
