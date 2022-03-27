@@ -4,6 +4,21 @@
 #Blocks of plaintext of 64 bits (8 characters)
 #key of 64 bits
 
+def FormatPlainTextBlocks(PlainText):
+    NumberofCharacters = len(PlainText)
+    for i in range(8 - (NumberofCharacters % 8)):
+        PlainText = PlainText + " "
+        NumberofCharacters+=1
+    NumberofBlocks = int(NumberofCharacters / 8)
+    PlainTextBlock = ["" , "" , "" , "" , "" , "" , "" , ""]
+    return(PlainTextBlock , NumberofBlocks , PlainText)
+
+def FormatCipherTextBlocks(PlainText):
+    NumberofBits = len(PlainText)
+    if NumberofBits % 64 != 0:
+        print("your ciphertext is the wrong length")
+    NumberofBlocks = int(NumberofBits / 64)
+    return(NumberofBlocks)
 
 def BlockBinarize(TextBlock):
     UnicodeBlock=[]
@@ -21,29 +36,19 @@ def EncryptBlock(BinaryBlock,KeyBlock):
         EncryptedBlock = EncryptedBlock + str(int(BinaryBlock[i])^int(KeyBlock[i]))
     return(EncryptedBlock)
 
-Mode = input("[b]inary/[t]ext?")
+Mode = input("[T]ncrypt/[b]ecrypt")
 KeyBlock = input("Binarykey[64b]").zfill(64)
 PlainText = str(input("messege"))
 
-if Mode == "t":
-    NumberofCharacters = len(PlainText)
-    for i in range(8 - (NumberofCharacters % 8)):
-        PlainText = PlainText + " "
-        NumberofCharacters+=1
-    NumberofBlocks = int(NumberofCharacters / 8)
-    PlainTextBlock = ["" , "" , "" , "" , "" , "" , "" , ""]
 if Mode == "b":
-    NumberofBits = len(PlainText)
-    if NumberofBits % 64 != 0:
-        print("youre input is wrong")
-    NumberofBlocks = int(NumberofBits / 64)
+    NumberofBlocks=FormatCipherTextBlocks(PlainText)
 else:
-    print("something has gone wrong :/")
+    PlainTextBlock, NumberofBlocks, PlainText=FormatPlainTextBlocks(PlainText)
 
 WholeMessage=""
 WholeBinary=""
 for i in range(NumberofBlocks):
-    if Mode == "t":
+    if Mode != "b":
         for j in range(8):
             PlainTextBlock[j] = PlainText[j+(8*i)]
         print(PlainTextBlock,"PlainTextBlock")
@@ -72,5 +77,5 @@ for i in range(NumberofBlocks):
         WholeMessage = WholeMessage + message
 if Mode == "b":
     print(WholeMessage)
-if Mode == "t":
+if Mode != "b":
     print(WholeBinary)
