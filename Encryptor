@@ -64,23 +64,23 @@ def Encrypt(Mode, KeyBlock, PlainText):
     
         EncryptedBlock = EncryptBlock(BinaryBlock,KeyBlock)
         print(EncryptedBlock,"EncryptedBlock")
-    
 
         if Mode == "b":
-            EncryptedBlockeighths=[]
-            string=""
+            EncryptedBlockEighths=[]
+            String=""
             for j in range(8):
-                string= "0b"+EncryptedBlock[j * 8:(j + 1) * 8]
-                EncryptedBlockeighths.append(string)
-            print(EncryptedBlockeighths,"Encrypted Block Eighths")
-            message = ""
+                String= "0b"+EncryptedBlock[j * 8:(j + 1) * 8]
+                EncryptedBlockEighths.append(String)
+            print(EncryptedBlockEighths,"Encrypted Block Eighths")
+            Message = ""
             for j in range(8):
-                message = message + chr(int(EncryptedBlockeighths[j],base=2))
-            print(message)
+                Message = Message + chr(int(EncryptedBlockEighths[j],base=2))
+            print(Message)
             print("\n")
-        
-            WholeMessage = WholeMessage + message
+
+            WholeMessage = WholeMessage + Message
         WholeBinary = WholeBinary + EncryptedBlock
+
     
     if Mode == "b":
         return WholeMessage
