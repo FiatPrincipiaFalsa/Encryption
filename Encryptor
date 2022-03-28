@@ -3,87 +3,87 @@
 #this is ECB where the encryption is just a xor function
 #Blocks of plaintext of 64 bits (8 characters)
 #key of 64 bits
+def Encrypt(Mode, KeyBlock, PlainText):
+    def FormatPlainTextBlocks(PlainText):
+        NumberofCharacters = len(PlainText)
+        for i in range(8 - (NumberofCharacters % 8)):
+            PlainText = PlainText + " "
+            NumberofCharacters+=1
+        NumberofBlocks = int(NumberofCharacters / 8)
+        PlainTextBlock = ["" , "" , "" , "" , "" , "" , "" , ""]
+        return(PlainTextBlock , NumberofBlocks , PlainText)
 
-def FormatPlainTextBlocks(PlainText):
-    NumberofCharacters = len(PlainText)
-    for i in range(8 - (NumberofCharacters % 8)):
-        PlainText = PlainText + " "
-        NumberofCharacters+=1
-    NumberofBlocks = int(NumberofCharacters / 8)
-    PlainTextBlock = ["" , "" , "" , "" , "" , "" , "" , ""]
-    return(PlainTextBlock , NumberofBlocks , PlainText)
+    def FormatCipherTextBlocks(PlainText):
+        NumberofBits = len(PlainText)
+        if NumberofBits % 64 != 0:
+            print("your ciphertext is the wrong length")
+        NumberofBlocks = int(NumberofBits / 64)
+        return(NumberofBlocks)
 
-def FormatCipherTextBlocks(PlainText):
-    NumberofBits = len(PlainText)
-    if NumberofBits % 64 != 0:
-        print("your ciphertext is the wrong length")
-    NumberofBlocks = int(NumberofBits / 64)
-    return(NumberofBlocks)
+    def BlockBinarize(TextBlock):
+        UnicodeBlock=[]
+        for i in range(8):
+            UnicodeBlock.append(ord(TextBlock[i]))
+        print(UnicodeBlock,"UnicodeBlock")
+        BinaryBlock = ""
+        for i in range(8):
+            BinaryBlock = BinaryBlock + bin(UnicodeBlock[i])[2:].zfill(8)
+        return(BinaryBlock)
 
-def BlockBinarize(TextBlock):
-    UnicodeBlock=[]
-    for i in range(8):
-        UnicodeBlock.append(ord(TextBlock[i]))
-    print(UnicodeBlock,"UnicodeBlock")
-    BinaryBlock = ""
-    for i in range(8):
-        BinaryBlock = BinaryBlock + bin(UnicodeBlock[i])[2:].zfill(8)
-    return(BinaryBlock)
+    def EncryptBlock(BinaryBlock,KeyBlock):
+        EncryptedBlock=""
+        for i in range(64):
+            EncryptedBlock = EncryptedBlock + str(int(BinaryBlock[i])^int(KeyBlock[i]))
+        return(EncryptedBlock)
 
-def EncryptBlock(BinaryBlock,KeyBlock):
-    EncryptedBlock=""
-    for i in range(64):
-        EncryptedBlock = EncryptedBlock + str(int(BinaryBlock[i])^int(KeyBlock[i]))
-    return(EncryptedBlock)
+    Mode = Mode
+    KeyBlock = KeyBlock.zfill(64)
+    PlainText = str(PlainText)
 
-Mode = input("[T]ncrypt/[b]ecrypt")
-KeyBlock = input("Binarykey[64b]").zfill(64)
-PlainText = str(input("messege"))
-
-if Mode == "b":
-    NumberofBlocks=FormatCipherTextBlocks(PlainText)
-else:
-    PlainTextBlock, NumberofBlocks, PlainText=FormatPlainTextBlocks(PlainText)
-
-WholeMessage=""
-WholeBinary=""
-
-for i in range(NumberofBlocks):
-    
     if Mode == "b":
-        BinaryBlock = PlainText[64 * i:64 * (i + 1)]
+        NumberofBlocks=FormatCipherTextBlocks(PlainText)
     else:
-        for j in range(8):
-            PlainTextBlock[j] = PlainText[j+(8*i)]
-        print(PlainTextBlock,"PlainTextBlock")
-        BinaryBlock = BlockBinarize(PlainTextBlock)
-        
-    print(BinaryBlock,"BinaryBlock")
-    
-    print(KeyBlock,"KeyBlock")
-    
-    EncryptedBlock = EncryptBlock(BinaryBlock,KeyBlock)
-    print(EncryptedBlock,"EncryptedBlock")
-    
-    WholeBinary = WholeBinary + EncryptedBlock
+        PlainTextBlock, NumberofBlocks, PlainText=FormatPlainTextBlocks(PlainText)
 
-    if Mode == "b":
-        EncryptedBlockeighths=[]
-        string=""
-        for j in range(8):
-            string= "0b"+EncryptedBlock[j * 8:(j + 1) * 8]
-            EncryptedBlockeighths.append(string)
-        print(EncryptedBlockeighths,"Encrypted Block Eighths")
-        message = ""
-        for j in range(8):
-            message = message + chr(int(EncryptedBlockeighths[j],base=2))
-        print(message)
-        print("\n")
-        
-        WholeMessage = WholeMessage + message
-    WholeBinary = WholeBinary + EncryptedBlock
+    WholeMessage=""
+    WholeBinary=""
+
+    for i in range(NumberofBlocks):
     
-if Mode == "b":
-    print(WholeMessage)
-else:
-    print(WholeBinary)
+        if Mode == "b":
+            BinaryBlock = PlainText[64 * i:64 * (i + 1)]
+        else:
+            for j in range(8):
+                PlainTextBlock[j] = PlainText[j+(8*i)]
+            print(PlainTextBlock,"PlainTextBlock")
+            BinaryBlock = BlockBinarize(PlainTextBlock)
+        
+        print(BinaryBlock,"BinaryBlock")
+    
+        print(KeyBlock,"KeyBlock")
+    
+        EncryptedBlock = EncryptBlock(BinaryBlock,KeyBlock)
+        print(EncryptedBlock,"EncryptedBlock")
+    
+        WholeBinary = WholeBinary + EncryptedBlock
+
+        if Mode == "b":
+            EncryptedBlockeighths=[]
+            string=""
+            for j in range(8):
+                string= "0b"+EncryptedBlock[j * 8:(j + 1) * 8]
+                EncryptedBlockeighths.append(string)
+            print(EncryptedBlockeighths,"Encrypted Block Eighths")
+            message = ""
+            for j in range(8):
+                message = message + chr(int(EncryptedBlockeighths[j],base=2))
+            print(message)
+            print("\n")
+        
+            WholeMessage = WholeMessage + message
+        WholeBinary = WholeBinary + EncryptedBlock
+    
+    if Mode == "b":
+        return WholeMessage
+    else:
+        return WholeBinary
