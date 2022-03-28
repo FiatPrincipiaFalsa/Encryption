@@ -5,20 +5,20 @@
 #key of 64 bits
 
 def FormatPlainTextBlocks(PlainText):
-    NumberOfCharacters = len(PlainText)
-    for i in range(8 - (NumberOfCharacters % 8)):
+    NumberofCharacters = len(PlainText)
+    for i in range(8 - (NumberofCharacters % 8)):
         PlainText = PlainText + " "
-        NumberOfCharacters+=1
-    NumberOfBlocks = int(NumberOfCharacters / 8)
+        NumberofCharacters+=1
+    NumberofBlocks = int(NumberofCharacters / 8)
     PlainTextBlock = ["" , "" , "" , "" , "" , "" , "" , ""]
-    return(PlainTextBlock , NumberOfBlocks , PlainText)
+    return(PlainTextBlock , NumberofBlocks , PlainText)
 
 def FormatCipherTextBlocks(PlainText):
-    NumberOfBits = len(PlainText)
-    if NumberOfBits % 64 != 0:
+    NumberofBits = len(PlainText)
+    if NumberofBits % 64 != 0:
         print("your ciphertext is the wrong length")
-    NumberOfBlocks = int(NumberOfBits / 64)
-    return(NumberOfBlocks)
+    NumberofBlocks = int(NumberofBits / 64)
+    return(NumberofBlocks)
 
 def BlockBinarize(TextBlock):
     UnicodeBlock=[]
@@ -41,14 +41,14 @@ KeyBlock = input("Binarykey[64b]").zfill(64)
 PlainText = str(input("messege"))
 
 if Mode == "b":
-    NumberOfBlocks=FormatCipherTextBlocks(PlainText)
+    NumberofBlocks=FormatCipherTextBlocks(PlainText)
 else:
-    PlainTextBlock, NumberOfBlocks, PlainText=FormatPlainTextBlocks(PlainText)
+    PlainTextBlock, NumberofBlocks, PlainText=FormatPlainTextBlocks(PlainText)
 
 WholeMessage=""
 WholeBinary=""
 
-for i in range(NumberOfBlocks):
+for i in range(NumberofBlocks):
     
     if Mode == "b":
         BinaryBlock = PlainText[64 * i:64 * (i + 1)]
