@@ -65,7 +65,6 @@ def Encrypt(Mode, KeyBlock, PlainText):
         EncryptedBlock = EncryptBlock(BinaryBlock,KeyBlock)
         print(EncryptedBlock,"EncryptedBlock")
     
-        WholeBinary = WholeBinary + EncryptedBlock
 
         if Mode == "b":
             EncryptedBlockeighths=[]
